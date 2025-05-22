@@ -17,18 +17,12 @@ wheels/
 # PyCharm settings
 .idea/
 
-article/src
-article/figures
-article/*.aux
-article/*.bbl
-article/*.blg
-article/*.log
-article/*.out
-article/*.toc
-article/*.fdb_latexmk
-article/*.fls
-article/*.synctex.gz
-article/*.run.xml
-article/*.tex
-article/*.bib
-article/*.xdvi
+# Ignore all files in the article directory
+article/*
+
+# But don't ignore PDF files in article/
+!article/*.pdf
+
+# Explicitly ignore src and figures directories under article/
+article/src/
+article/figures/
