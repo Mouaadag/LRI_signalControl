@@ -1,3 +1,19 @@
+"""
+Script d'exportation du modèle LRI pour SignalControl
+
+Ce script permet d'exporter un modèle d'apprentissage par renforcement LRI (Linear Reward-Inaction)
+préalablement optimisé vers un fichier pickle pour une utilisation en production.
+Il prend en paramètre un triplet de probabilités optimal (diminuer/maintenir/augmenter)
+ainsi que des hyperparamètres comme la taille du pas et le facteur gamma qui équilibre
+économie d'énergie et confort utilisateur.
+
+Usage:
+    python export.py  # Exporte avec les valeurs par défaut
+    
+Le modèle exporté sera utilisé par l'application web SignalControl pour générer
+des recommandations d'ajustement du signal de contrôle.
+"""
+
 import os
 import pickle
 import sys
@@ -5,7 +21,7 @@ import sys
 import numpy as np
 
 # Ajouter le chemin du notebook/ProduitFinal au système
-sys.path.append(os.path.abspath("../notebook/ProduitFinal"))
+sys.path.append(os.path.abspath("../notebook/"))
 
 # Importer les classes nécessaires
 from LRIagent import LRIAgent
