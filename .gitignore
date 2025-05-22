@@ -16,13 +16,12 @@ wheels/
 .vscode/
 # PyCharm settings
 .idea/
-
-# Ignore all files in the article directory
+# Ignore all files in article/
 article/*
 
-# But don't ignore PDF files in article/
+# Don't ignore PDFs in article/
 !article/*.pdf
 
-# Explicitly ignore src and figures directories under article/
+# Explicitly ignore src and figures directories
 article/src/
 article/figures/
