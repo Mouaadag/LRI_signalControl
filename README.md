@@ -22,7 +22,7 @@ Le système modélise l'équilibre délicat entre efficacité énergétique et s
 
 ### Prérequis
 - Python 3.8+
-- uv (gestionnaire de packages Python moderne)
+- [uv](https://github.com/astral-sh/uv) (gestionnaire de packages Python )
 
 ### Instructions
 
