@@ -8,3 +8,11 @@ wheels/
 
 # Virtual environments
 .venv
+.DS_Store
+.gitignore
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+# VS Code settings
+.vscode/
+# PyCharm settings
+.idea/
