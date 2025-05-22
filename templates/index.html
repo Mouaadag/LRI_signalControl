@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>LRI Agent - Système de recommandation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .col {
+            flex: 1;
+            min-width: 300px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        form {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .error {
+            background-color: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #dc3545;
+        }
+        .success {
+            background-color: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #28a745;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .current-value {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            font-weight: bold;
+        }
+        .auto-button {
+            display: inline-block;
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .auto-button:hover {
+            background-color: #219653;
+        }
+        .graph-container {
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+        }
+        .graph-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .graph-img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .settings-panel {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .settings-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .refresh-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .refresh-btn:hover {
+            background-color: #5a6268;
+        }
+        /* Styles pour les métriques */
+        .metrics-panel {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .metrics-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .metrics-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .metric-card {
+            flex: 1;
+            min-width: 150px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        /* Style pour la boîte d'information */
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+            font-size: 0.9em;
+            color: #495057;
+        }
+        /* Style pour les notes d'intervention */
+        .intervention-note {
+            background-color: #fff3cd;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 4px solid #ffc107;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .intervention-btn {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .intervention-btn:hover {
+            background-color: #c0392b;
+        }
+        .control-panel {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>LRI Agent - Système de recommandation</h1>
+    
+    <div class="info-box">
+        <p><strong>Note importante:</strong> Toute intervention manuelle remet automatiquement le signal à sa valeur maximale, 
+        simulant le comportement par défaut du système en cas d'intervention utilisateur.</p>
+    </div>
+    
+    <div class="settings-panel">
+        <div class="settings-title">Paramètres du système</div>
+        <form action="/settings" method="post">
+            <div class="container">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="max_signal">Valeur maximale du signal:</label>
+                        <input type="number" id="max_signal" name="max_signal" min="1" max="1000" value="{{ max_signal }}" required class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="step_size">Taille du pas (step_size):</label>
+                        <input type="number" id="step_size" name="step_size" min="1" max="100" value="{{ step_size }}" required class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="update_interval">Intervalle de mise à jour (secondes):</label>
+                        <input type="number" id="update_interval" name="update_interval" min="1" max="3600" value="{{ update_interval }}" required class="form-control">
+                    </div>
+                </div>
+            </div>
+            <button type="submit">Mettre à jour les paramètres</button>
+        </form>
+    </div>
+    
+    
+    <div class="current-value">
+        Valeur actuelle du système: <span id="current-value-display">{{ current_value }}</span>
+    </div>
+
+
+    
+
+    
+    <div class="container">
+        <div class="col">
+            <h2>Feedback basé sur l'historique</h2>
+            <div class="info-box" style="background-color: #e8f8f5; border-left-color: #27ae60;">
+                <p>Cette fonction analyse automatiquement l'historique des dernières valeurs du signal et les interactions pour générer un feedback pertinent pour l'algorithme d'apprentissage.</p>
+            </div>
+            
+            <div class="settings-panel" style="margin-top: 15px;">
+                <div class="form-group">
+                    <label for="history_length">Nombre de points d'historique à utiliser:</label>
+                    <select id="history_length" class="form-control">
+                        <option value="5">5 derniers points</option>
+                        <option value="10" selected>10 derniers points</option>
+                        <option value="20">20 derniers points</option>
+                        <option value="all">Tout l'historique</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedback_mode">Mode d'analyse:</label>
+                    <select id="feedback_mode" class="form-control">
+                        <option value="avg">Valeur moyenne (équilibré)</option>
+                        <option value="min">Valeur minimale (économie maximale)</option>
+                        <option value="comfort">Confort optimal (moins d'interventions)</option>
+                    </select>
+                </div>
+                
+                <button onclick="sendAutomaticFeedback()" class="auto-button" style="margin-top: 15px; background-color: #16a085;">
+                    Générer et envoyer un feedback automatique
+                </button>
+                <div class="intervention-note" style="background-color: #e8f8f5; border-left-color: #16a085;">
+                    Note: Envoie un feedback au modèle en fonction de l'historique récent.
+                </div>
+            </div>
+            
+            <div id="auto-feedback-result" style="display: none;" class="result">
+                <h3>Résultat du feedback automatique</h3>
+                <div id="auto-feedback-content"></div>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="control-panel">
+            <button id="auto-update-btn" onclick="toggleAutoUpdate()" data-active="false" class="auto-button">
+                Activer la mise à jour automatique
+            </button>
+            
+            <button onclick="manualIntervention()" class="intervention-btn">
+                Intervention utilisateur
+            </button>
+        </div>
+        {% if result %}
+        <div class="result" id="result-message">
+            <h3>Résultat</h3>
+            {% if result.intervention %}
+            <p class="intervention-note">
+                <strong>Intervention détectée!</strong> Le signal a été remis à sa valeur maximale.
+            </p>
+            {% endif %}
+            <p><strong>Valeur précédente:</strong> {{ result.current_value }}</p>
+            <p><strong>Valeur recommandée:</strong> {{ result.recommended_value }}</p>
+            <p><strong>Triplet actuel:</strong> [{{ result.current_triplet[0]|round(3) }}, {{ result.current_triplet[1]|round(3) }}, {{ result.current_triplet[2]|round(3) }}]</p>
+            <p><em>Horodatage: {{ result.timestamp }}</em></p>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="error" id="error-message">
+            <h3>Erreur</h3>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+        
+        {% if success_message %}
+        <div class="success" id="success-message">
+            <h3>Succès</h3>
+            <p>{{ success_message }}</p>
+        </div>
+        {% endif %}
+        <!-- Ajout du tableau de bord des métriques -->
+        <div class="metrics-panel">
+            <div class="metrics-title">Indicateurs de performance</div>
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <div class="metric-value" id="energy-savings">--</div>
+                    <div class="metric-label">Économie d'énergie</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="comfort-score">--</div>
+                    <div class="metric-label">Score de confort</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="intervention-count">--</div>
+                    <div class="metric-label">Interventions</div>
+                </div>
+            </div>
+            <button onclick="refreshMetrics()" class="refresh-btn">Rafraîchir les indicateurs</button>
+        </div>
+    <div class="graph-container">
+        <div class="graph-title">Évolution du signal dans le temps</div>
+        <!-- Utilisation d'un iframe pour le graphique interactif -->
+        <div id="signal-graph-container">
+            <iframe id="graph-iframe" src="/graph_html" width="100%" height="500px" frameborder="0"></iframe>
+        </div>
+        <button onclick="refreshGraph()" class="refresh-btn">Rafraîchir le graphique</button>
+    </div>
+    
+    <!-- {% if history %}
+    <h2>Historique des prédictions</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Horodatage</th>
+                <th>Valeur initiale</th>
+                <th>Valeur recommandée</th>
+                <th>Triplet [p_dim, p_maint, p_aug]</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in history %}
+            <tr>
+                <td>{{ entry.timestamp }}</td>
+                <td>{{ entry.current_value }}</td>
+                <td>{{ entry.new_value }}</td>
+                <td>[{{ entry.triplet[0]|round(3) }}, {{ entry.triplet[1]|round(3) }}, {{ entry.triplet[2]|round(3) }}]</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %} -->
+    
+    <div class="footer">
+        <p>LRI Agent - Système de recommandation basé sur l'apprentissage par renforcement</p>
+    </div>
+    
+    <!-- Scripts -->
+    <script>
+        // Flag pour suivre l'état de la mise à jour automatique
+        let autoUpdateActive = false;
+        
+        // Fonction pour rafraîchir le graphique
+        function refreshGraph() {
+            const iframe = document.getElementById('graph-iframe');
+            if (iframe) {
+                // Ajouter un paramètre timestamp pour éviter la mise en cache
+                iframe.src = '/graph_html?t=' + new Date().getTime();
+            }
+        }
+        
+        // Fonction pour rafraîchir les métriques
+        function refreshMetrics() {
+            fetch('/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    // Mettre à jour les métriques dans l'interface
+                    document.getElementById('energy-savings').textContent = 
+                        data.energy_metrics.energy_savings_percent.toFixed(1) + '%';
+                    document.getElementById('comfort-score').textContent = 
+                        data.energy_metrics.comfort_score.toFixed(1) + '/100';
+                    document.getElementById('intervention-count').textContent = 
+                        data.energy_metrics.total_interventions;
+                    
+                    // Mettre à jour les couleurs en fonction des valeurs
+                    const energySavings = document.getElementById('energy-savings');
+                    if (data.energy_metrics.energy_savings_percent > 30) {
+                        energySavings.style.color = '#27ae60'; // vert
+                    } else if (data.energy_metrics.energy_savings_percent > 10) {
+                        energySavings.style.color = '#f39c12'; // orange
+                    } else {
+                        energySavings.style.color = '#e74c3c'; // rouge
+                    }
+                    
+                    const comfortScore = document.getElementById('comfort-score');
+                    if (data.energy_metrics.comfort_score > 80) {
+                        comfortScore.style.color = '#27ae60'; // vert
+                    } else if (data.energy_metrics.comfort_score > 50) {
+                        comfortScore.style.color = '#f39c12'; // orange
+                    } else {
+                        comfortScore.style.color = '#e74c3c'; // rouge
+                    }
+                })
+                .catch(error => console.error('Erreur lors du chargement des métriques:', error));
+        }
+        
+        // Fonction pour envoyer un feedback automatique basé sur l'historique
+        function sendAutomaticFeedback() {
+            const historyLength = document.getElementById('history_length').value;
+            const feedbackMode = document.getElementById('feedback_mode').value;
+            
+            // Afficher un indicateur de chargement
+            const resultDiv = document.getElementById('auto-feedback-result');
+            resultDiv.style.display = 'block';
+            document.getElementById('auto-feedback-content').innerHTML = '<p style="text-align: center;"><em>Analyse de l\'historique en cours...</em></p>';
+            
+            // Récupérer les métriques et l'historique du signal
+            fetch('/metrics')
+                .then(response => response.json())
+                .then(metricsData => {
+                    // Appeler l'API de feedback automatique
+                    return fetch('/auto_feedback', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            history_length: historyLength,
+                            feedback_mode: feedbackMode,
+                            no_intervention: true  // Ajouter ce paramètre pour éviter l'intervention
+                        }),
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    // Afficher les résultats
+                    const resultDiv = document.getElementById('auto-feedback-result');
+                    resultDiv.id = 'temp-feedback-message'; // Changer l'ID pour le faire disparaître automatiquement
+                    
+                    let content = `
+                        <p><strong>Points d'historique analysés:</strong> ${data.points_analyzed}</p>
+                        <p><strong>Valeur optimale déterminée:</strong> ${data.optimal_value.toFixed(2)}</p>
+                        <p><strong>Récompense calculée:</strong> ${data.reward.toFixed(4)}</p>
+                        <p><strong>Nouveau triplet:</strong> [${data.new_triplet.map(v => v.toFixed(3)).join(', ')}]</p>
+                        <p><em>Approche utilisée: ${getFeedbackModeText(data.feedback_mode)}</em></p>
+                    `;
+                    
+                    // Ajouter un message d'intervention seulement si une intervention a eu lieu
+                    if (data.intervention) {
+                        content = `
+                            <p class="intervention-note">
+                                <strong>Intervention automatique!</strong> Le signal a été remis à sa valeur maximale.
+                            </p>
+                        ` + content;
+                    } else {
+                        content = `
+                            <p class="success" style="background-color: #d4edda; padding: 10px; border-radius: 5px;">
+                                <strong>Feedback envoyé avec succès!</strong>
+                            </p>
+                        ` + content;
+                    }
+                    
+                    document.getElementById('auto-feedback-content').innerHTML = content;
+                    
+                    // Rafraîchir le graphique et les métriques
+                    refreshGraph();
+                    refreshMetrics();
+                    
+                    // Mettre à jour la valeur actuelle affichée si nécessaire
+                    if (data.current_value) {
+                        document.getElementById('current-value-display').textContent = data.current_value;
+                    }
+                    
+                    // Faire disparaître le message de résultat après 10 secondes
+                    setTimeout(() => {
+                        resultDiv.style.transition = 'opacity 1s ease-out';
+                        resultDiv.style.opacity = '0';
+                        setTimeout(() => {
+                            if (resultDiv.parentNode) {
+                                resultDiv.parentNode.removeChild(resultDiv);
+                                // Réinitialiser l'élément pour la prochaine utilisation
+                                const newResultDiv = document.createElement('div');
+                                newResultDiv.id = 'auto-feedback-result';
+                                newResultDiv.className = 'result';
+                                newResultDiv.style.display = 'none';
+                                newResultDiv.innerHTML = '<div id="auto-feedback-content"></div>';
+                                document.querySelector('.col').appendChild(newResultDiv);
+                            }
+                        }, 1000);
+                    }, 10000); // 10 secondes avant de commencer à disparaître
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('auto-feedback-content').innerHTML = `
+                        <p class="error">Impossible de générer un feedback automatique: ${error.message}</p>
+                    `;
+                    
+                    // Faire aussi disparaître ce message d'erreur après 10 secondes
+                    const resultDiv = document.getElementById('auto-feedback-result');
+                    setTimeout(() => {
+                        resultDiv.style.transition = 'opacity 1s ease-out';
+                        resultDiv.style.opacity = '0';
+                        setTimeout(() => {
+                            if (resultDiv.parentNode) {
+                                resultDiv.style.display = 'none';
+                                resultDiv.style.opacity = '1';
+                            }
+                        }, 1000);
+                    }, 10000);
+                });
+        }
+
+        // Fonction pour obtenir le texte descriptif du mode de feedback
+        function getFeedbackModeText(mode) {
+            switch(mode) {
+                case 'avg':
+                    return 'Valeur moyenne (équilibré)';
+                case 'min':
+                    return 'Valeur minimale (économie maximale)';
+                case 'comfort':
+                    return 'Confort optimal (moins d\'interventions)';
+                default:
+                    return mode;
+            }
+        }
+        
+        // Fonction pour intervention manuelle simple
+        function manualIntervention() {
+            fetch('/current_value', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    intervention: true
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Intervention:', data);
+                
+                // Afficher un message d'intervention
+                const resultElement = document.createElement('div');
+                resultElement.id = 'temp-message';
+                resultElement.className = 'result';
+                resultElement.innerHTML = `
+                    <h3>Intervention utilisateur</h3>
+                    <p class="intervention-note">
+                        <strong>Intervention détectée!</strong> Le signal a été remis à sa valeur maximale (${data.current_value}).
+                    </p>
+                    <p><em>Horodatage: ${new Date().toLocaleTimeString()}</em></p>
+                `;
+                
+                // Ajouter le message avant le panneau de métriques
+                const metricsPanel = document.querySelector('.metrics-panel');
+                document.body.insertBefore(resultElement, metricsPanel);
+                
+                // Rafraîchir le graphique et les métriques
+                refreshGraph();
+                refreshMetrics();
+                
+                // Mettre à jour la valeur actuelle affichée
+                document.getElementById('current-value-display').textContent = data.current_value;
+                
+                // Supprimer le message après 5 secondes
+                setTimeout(() => {
+                    if (resultElement.parentNode) {
+                        resultElement.style.transition = 'opacity 1s ease-out';
+                        resultElement.style.opacity = '0';
+                        setTimeout(() => {
+                            if (resultElement.parentNode) {
+                                resultElement.parentNode.removeChild(resultElement);
+                            }
+                        }, 1000);
+                    }
+                }, 5000);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        
+        // Nouvelle fonction pour activer la mise à jour automatique sans créer d'intervention
+        function activateAutoUpdate(showMessage = true) {
+            const autoBtn = document.getElementById('auto-update-btn');
+            const interval = parseInt(document.getElementById('update_interval').value) * 1000;
+            
+            // Commencer les mises à jour automatiques SANS faire la première requête immédiatement
+            window.autoUpdateInterval = setInterval(() => {
+                fetch('/auto')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Auto update:', data);
+                        refreshGraph();
+                        refreshMetrics();
+                        // Mise à jour de la valeur actuelle affichée
+                        document.getElementById('current-value-display').textContent = data.recommended_value;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }, interval);
+            
+            // Mettre à jour l'interface
+            autoBtn.setAttribute('data-active', 'true');
+            autoBtn.textContent = 'Désactiver la mise à jour automatique';
+            autoBtn.style.backgroundColor = '#e74c3c';
+            
+            // Sauvegarder l'état
+            localStorage.setItem('autoUpdateActive', 'true');
+            autoUpdateActive = true;
+            
+            // Afficher un message si nécessaire
+            if (showMessage) {
+                const messageElement = document.createElement('div');
+                messageElement.id = 'temp-message';
+                messageElement.className = 'success';
+                messageElement.innerHTML = `
+                    <h3>Mise à jour automatique activée</h3>
+                    <p>Le système va se mettre à jour automatiquement toutes les ${interval/1000} secondes.</p>
+                    <p><em>La première mise à jour aura lieu dans ${interval/1000} secondes.</em></p>
+                `;
+                const controlPanel = document.querySelector('.control-panel');
+                document.body.insertBefore(messageElement, controlPanel.nextSibling);
+                
+                // Faire disparaître le message après 5 secondes
+                setTimeout(() => {
+                    messageElement.style.transition = 'opacity 1s ease-out';
+                    messageElement.style.opacity = '0';
+                    setTimeout(() => {
+                        if (messageElement.parentNode) {
+                            messageElement.parentNode.removeChild(messageElement);
+                        }
+                    }, 1000);
+                }, 5000);
+            }
+        }
+        
+        // Fonction pour démarrer la mise à jour automatique
+        function toggleAutoUpdate() {
+            const autoBtn = document.getElementById('auto-update-btn');
+            const isActive = autoBtn.getAttribute('data-active') === 'true';
+            
+            if (isActive) {
+                // Arrêter les mises à jour
+                clearInterval(window.autoUpdateInterval);
+                autoBtn.setAttribute('data-active', 'false');
+                autoBtn.textContent = 'Activer la mise à jour automatique';
+                autoBtn.style.backgroundColor = '#27ae60';
+                
+                // Sauvegarder l'état
+                localStorage.setItem('autoUpdateActive', 'false');
+                autoUpdateActive = false;
+                
+                // Afficher un message de confirmation
+                const messageElement = document.createElement('div');
+                messageElement.id = 'temp-message';
+                messageElement.className = 'success';
+                messageElement.innerHTML = `
+                    <h3>Mise à jour automatique désactivée</h3>
+                    <p>Le système ne se mettra plus à jour automatiquement.</p>
+                `;
+                const controlPanel = document.querySelector('.control-panel');
+                document.body.insertBefore(messageElement, controlPanel.nextSibling);
+                
+                // Faire disparaître le message après 5 secondes
+                setTimeout(() => {
+                    messageElement.style.transition = 'opacity 1s ease-out';
+                    messageElement.style.opacity = '0';
+                    setTimeout(() => {
+                        if (messageElement.parentNode) {
+                            messageElement.parentNode.removeChild(messageElement);
+                        }
+                    }, 1000);
+                }, 5000);
+            } else {
+                // Activer la mise à jour automatique avec message
+                activateAutoUpdate(true);
+            }
+        }
+        
+        // Fonction pour faire disparaître les messages après un délai
+        function setupAutoHideMessages() {
+            // Liste des IDs des messages à faire disparaître
+            const messageIds = ['result-message', 'error-message', 'success-message'];
+            
+            // Pour chaque ID, si l'élément existe, le faire disparaître après 10 secondes
+            messageIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    console.log(`Message trouvé: ${id}, sera masqué dans 10 secondes`);
+                    
+                    // Ajouter une animation de fondu pour une transition plus douce
+                    setTimeout(() => {
+                        // Animer la disparition
+                        element.style.transition = 'opacity 1s ease-out';
+                        element.style.opacity = '0';
+                        
+                        // Supprimer l'élément après la fin de l'animation
+                        setTimeout(() => {
+                            if (element.parentNode) {
+                                element.parentNode.removeChild(element);
+                            }
+                        }, 1000); // 1 seconde pour l'animation
+                    }, 10000); // 10 secondes avant de commencer à disparaître
+                }
+            });
+        }
+        
+        // Initialiser au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Charger les métriques
+            refreshMetrics();
+            
+            // Gérer les messages auto-disparaissants
+            setupAutoHideMessages();
+            
+            // Mettre à jour les métriques toutes les 30 secondes
+            setInterval(refreshMetrics, 30000);
+            
+            // Vérifier si la mise à jour automatique devrait être active, mais avec une approche plus sûre
+            const savedAutoUpdateState = localStorage.getItem('autoUpdateActive');
+            
+            if (savedAutoUpdateState === 'true') {
+                // Activer la mise à jour automatique sans créer d'intervention
+                setTimeout(() => {
+                    // Activer sans faire d'appel initial qui pourrait causer une intervention
+                    const autoBtn = document.getElementById('auto-update-btn');
+                    autoBtn.setAttribute('data-active', 'true');
+                    autoBtn.textContent = 'Désactiver la mise à jour automatique';
+                    autoBtn.style.backgroundColor = '#e74c3c';
+                    autoUpdateActive = true;
+                    
+                    // Démarrer l'intervalle SANS faire la première requête immédiatement
+                    const interval = parseInt(document.getElementById('update_interval').value) * 1000;
+                    window.autoUpdateInterval = setInterval(() => {
+                        fetch('/auto')
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Auto update:', data);
+                                refreshGraph();
+                                refreshMetrics();
+                                // Mise à jour de la valeur actuelle affichée
+                                document.getElementById('current-value-display').textContent = data.recommended_value;
+                            })
+                            .catch(error => console.error('Error:', error));
+                    }, interval);
+                }, 1000); // Petit délai pour laisser la page se charger complètement
+            }
+        });
+    </script>
+</body>
+</html>

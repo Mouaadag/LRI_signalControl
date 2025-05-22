@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LRI Agent - Résultat du feedback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .result {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .error {
+            background-color: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #dc3545;
+        }
+        .button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .signal-reset {
+            background-color: #fff3cd;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>LRI Agent - Résultat du feedback</h1>
+    
+    {% if result %}
+    <div class="result">
+        <h2>Feedback traité avec succès</h2>
+        <p><strong>Récompense calculée:</strong> {{ result.reward|round(4) }}</p>
+        <p><strong>Triplet mis à jour:</strong> [{{ result.updated_triplet[0]|round(3) }}, {{ result.updated_triplet[1]|round(3) }}, {{ result.updated_triplet[2]|round(3) }}]</p>
+        <p class="signal-reset"><strong>Signal remis à:</strong> {{ result.new_signal_value }} (valeur maximale)</p>
+        <p>Le modèle a été mis à jour avec ce feedback.</p>
+    </div>
+    {% endif %}
+    
+    {% if error %}
+    <div class="error">
+        <h2>Erreur</h2>
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+    
+    <a href="/" class="button">Retour à l'accueil</a>
+    
+    <div class="footer">
+        <p>LRI Agent - Système de recommandation basé sur l'apprentissage par renforcement</p>
+    </div>
+</body>
+</html>
