@@ -2,11 +2,11 @@
 
 ## Présentation du Projet
 
-SignalControl est un projet de recherche appliquée en apprentissage par renforcement (Reinforcement Learning), dédié à l’optimisation dynamique des systèmes de contrôle. Son objectif est de permettre l’ajustement intelligent d’un signal de commande en temps réel, de manière à concilier efficacité énergétique et confort utilisateur, souvent en tension dans les systèmes réels tels que le chauffage, la climatisation ou l’éclairage.
+SignalControl est un projet de recherche innovant explorant l'application de l'apprentissage par renforcement (RL) à l'optimisation dynamique des systèmes de contrôle. Développé initialement dans Jupyter Notebook, ce projet vise à résoudre un défi fondamental: l'ajustement intelligent et automatique d'un signal de commande qui équilibre efficacement deux objectifs contradictoires - l'économie d'énergie et le maintien d'un niveau de confort acceptable pour l'utilisateur. Cette problématique se retrouve dans de nombreux systèmes physiques comme le chauffage, la climatisation ou l'éclairage intelligent.
 
-Le cœur du projet repose sur un modèle d’apprentissage par renforcement capable de s’adapter à des environnements variés pour atteindre un équilibre optimal entre consommation d’énergie et satisfaction des utilisateurs. Ce modèle est exposé via une API REST, facilitant son intégration dans une application web interactive.
+Le cœur scientifique du projet, détaillé dans l'article académique disponible dans le dossier "article", repose sur un algorithme RL spécifiquement conçu pour apprendre de manière adaptative dans des environnements aux conditions variables. Notre implémentation parvient à converger vers un équilibre optimal entre minimisation de la consommation énergétique et satisfaction utilisateur à travers un processus d'apprentissage itératif et auto-correctif.
 
-Cette application permet de visualiser et d’interagir avec le comportement de l’agent en temps réel, dans des scénarios simulés. Elle offre ainsi une démonstration concrète de la capacité des algorithmes de RL à s’ajuster dynamiquement, tout en rendant accessible une technologie avancée à travers une interface intuitive et pédagogique.
+Pour démontrer l'efficacité de notre approche théorique, nous avons développé une API REST avec Flask qui encapsule le modèle entraîné. Cette architecture permet non seulement de visualiser les résultats via notre interface web dédiée, mais offre également la possibilité d'intégrer facilement le système dans n'importe quelle application tierce capable de communiquer via HTTP. Ainsi, cette application sert à la fois d'outil de démonstration interactif et de preuve de concept pour l'intégration de modèles RL dans des systèmes de contrôle réels.
 
 ## Fonctionnalités principales
 
