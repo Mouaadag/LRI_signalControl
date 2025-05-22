@@ -2,9 +2,11 @@
 
 ## Présentation du Projet
 
-SignalControl est un projet innovant développé dans le cadre de recherches sur l'optimisation dynamique des systèmes. Il s'agit d'une application web qui exploite les principes de l'apprentissage par renforcement pour ajuster intelligemment un signal de contrôle, permettant ainsi de réaliser des économies d'énergie tout en maintenant un niveau de confort optimal pour l'utilisateur.
+SignalControl est un projet de recherche appliquée en apprentissage par renforcement (Reinforcement Learning), dédié à l’optimisation dynamique des systèmes de contrôle. Son objectif est de permettre l’ajustement intelligent d’un signal de commande en temps réel, de manière à concilier efficacité énergétique et confort utilisateur, souvent en tension dans les systèmes réels tels que le chauffage, la climatisation ou l’éclairage.
 
-Le système modélise l'équilibre délicat entre efficacité énergétique et satisfaction utilisateur, deux objectifs souvent contradictoires dans les systèmes de contrôle réels (chauffage, climatisation, éclairage, etc.). À travers une interface intuitive, l'application permet de visualiser et d'interagir avec l'agent d'apprentissage, offrant une démonstration concrète des capacités adaptatives des algorithmes de RL.
+Le cœur du projet repose sur un modèle d’apprentissage par renforcement capable de s’adapter à des environnements variés pour atteindre un équilibre optimal entre consommation d’énergie et satisfaction des utilisateurs. Ce modèle est exposé via une API REST, facilitant son intégration dans une application web interactive.
+
+Cette application permet de visualiser et d’interagir avec le comportement de l’agent en temps réel, dans des scénarios simulés. Elle offre ainsi une démonstration concrète de la capacité des algorithmes de RL à s’ajuster dynamiquement, tout en rendant accessible une technologie avancée à travers une interface intuitive et pédagogique.
 
 ## Fonctionnalités principales
 
