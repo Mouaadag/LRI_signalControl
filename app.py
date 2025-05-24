@@ -14,7 +14,7 @@ import plotly.io as pio
 from flask import Flask, jsonify, render_template, request, send_file
 
 # Ajouter les chemins nécessaires
-sys.path.append(os.path.abspath("../notebook/ProduitFinal"))
+sys.path.append(os.path.abspath("../notebook/"))
 
 app = Flask(__name__)
 
