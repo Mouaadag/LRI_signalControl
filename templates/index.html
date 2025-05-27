@@ -288,9 +288,9 @@
     </div>
     
     
-    <div class="current-value">
+    <!-- <div class="current-value">
         Valeur actuelle du système: <span id="current-value-display">{{ current_value }}</span>
-    </div>
+    </div> -->
 
 
     
@@ -605,7 +605,7 @@
             }
         }
         
-        // Fonction pour intervention manuelle simple
+        // Fonction pour intervention manuelle simple - version corrigée
         function manualIntervention() {
             fetch('/current_value', {
                 method: 'POST',
@@ -640,16 +640,13 @@
                 refreshGraph();
                 refreshMetrics();
                 
-                // Mettre à jour la valeur actuelle affichée
-                document.getElementById('current-value-display').textContent = data.current_value;
-                
                 // Supprimer le message après 5 secondes
                 setTimeout(() => {
-                    if (resultElement.parentNode) {
+                    if (resultElement && resultElement.parentNode) {
                         resultElement.style.transition = 'opacity 1s ease-out';
                         resultElement.style.opacity = '0';
                         setTimeout(() => {
-                            if (resultElement.parentNode) {
+                            if (resultElement && resultElement.parentNode) {
                                 resultElement.parentNode.removeChild(resultElement);
                             }
                         }, 1000);
@@ -672,8 +669,12 @@
                         console.log('Auto update:', data);
                         refreshGraph();
                         refreshMetrics();
-                        // Mise à jour de la valeur actuelle affichée
-                        document.getElementById('current-value-display').textContent = data.recommended_value;
+                        
+                        // Ne pas mettre à jour la valeur actuelle si l'élément n'existe pas
+                        // const currentValueDisplay = document.getElementById('current-value-display');
+                        // if (currentValueDisplay) {
+                        //     currentValueDisplay.textContent = data.recommended_value;
+                        // }
                     })
                     .catch(error => console.error('Error:', error));
             }, interval);

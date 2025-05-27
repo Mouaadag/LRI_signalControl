@@ -2,7 +2,7 @@
 
 ## Présentation du Projet
 
-SignalControl est un projet de recherche innovant explorant l'application de l'apprentissage par renforcement (RL) à l'optimisation dynamique des systèmes de contrôle. Développé initialement dans Jupyter Notebook, ce projet vise à résoudre un défi fondamental: l'ajustement intelligent et automatique d'un signal de commande qui équilibre efficacement deux objectifs contradictoires - l'économie d'énergie et le maintien d'un niveau de confort acceptable pour l'utilisateur. Cette problématique se retrouve dans de nombreux systèmes physiques comme le chauffage, la climatisation ou l'éclairage intelligent.
+SignalControl est un projet de recherche explorant l'application de l'apprentissage par renforcement (RL) à l'optimisation dynamique des systèmes de contrôle. Développé initialement dans Jupyter Notebook, ce projet vise à résoudre un défi fondamental: l'ajustement intelligent et automatique d'un signal de commande qui équilibre efficacement deux objectifs contradictoires - l'économie d'énergie et le maintien d'un niveau de confort acceptable pour l'utilisateur. Cette problématique se retrouve dans de nombreux systèmes physiques comme le chauffage, la climatisation ou l'éclairage intelligent.
 
 Le cœur scientifique du projet, détaillé dans l'article académique disponible dans le dossier "article", repose sur un algorithme RL spécifiquement conçu pour apprendre de manière adaptative dans des environnements aux conditions variables. Notre implémentation parvient à converger vers un équilibre optimal entre minimisation de la consommation énergétique et satisfaction utilisateur à travers un processus d'apprentissage itératif et auto-correctif.
 
